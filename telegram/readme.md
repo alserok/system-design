@@ -162,8 +162,12 @@ In this case, push-notifications. For that may be used Firebase.
 ---
 ## Messaging system
 
+<img src="images/benchmarks.png" alt="benchmarks">
+
 First of all, the goal was to find a fast and reliable solution that will handle
 a high load.
+
+<img src="images/benchmarks1.png" alt="benchmarks">
 
 I had a choice between *Redis PUB/SUB* and *NATS*. Both are fast.
 In real time chat app it is crucial. In 'chats' service, I made a choice
