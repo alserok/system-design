@@ -1,4 +1,4 @@
-# Telegram
+# Telegram 
 
 ---
 *To begin with, my goal was to make design for a light Telegram version.
@@ -30,11 +30,6 @@ service to get users avatar and nicknames.
 ## Chats
 
 <img src="images/chats.png" alt="chats">
-
-*Functionality*
-* Write a message
-* Edit/delete a message
-* Send audio/video file
 
 The most important part of Telegram is its chat part. 
 Gateway redirects http/websocket requests to one of the instances, 
@@ -94,15 +89,21 @@ would allow 'auth' service to get user data fast by its id.
 
 The major part of Telegram's success is its channel feature.
 
-<img src="images/chats_db.png" alt="channels db">
-
 Gateway communicates with this service via gRPC, 
 gRPC was chosen due to its fast.
+
+<img src="images/chats_db.png" alt="channels db">
 
 So as not to repeat myself, 
 Mongo was chosen for the same reason as in chat service. Data structure may significantly 
 differ.
+
 Files are stored in s3 too.
+
+<img src="images/es.png" alt="es">
+
+To make searching the channel more convenient and accurate, I decided to use
+ElasticSearch. Searching will be via channels name and description.
 
 Cache—Redis.
 Here cache is also being updated after any new post in the channel; it keeps the last 10 
@@ -147,10 +148,18 @@ Friend invitation has its version, f.e. 'pending', 'accepted', 'denied'.
 
 <img src="images/contacts_db.png" alt="contacts db">
 
-Postgres - because of structured data and indexes on user id field to search faster.
+Postgres - because of structured data and hash indexes on user id field to search faster.
 
 ---
 
+## Notifications
+
+<img src="images/notifications.png" alt="notifications">
+
+Service which consumes data from a messaging system and then sends notifications to users.
+In this case, push-notifications. For that may be used Firebase.
+
+---
 ## Messaging system
 
 First of all, the goal was to find a fast and reliable solution that will handle
@@ -175,14 +184,15 @@ high-performance messaging.
 
 * gRPC - is fast and handles high load. That is the main reason why it suits
 here. As for me, it is the best way to make inter-service communication.
+Transferring files may be implemented via gRPC streaming feature.
 * Websockets/HTTP - websocket is an optimal solution for real-time communication.
 And for the sake of simplicity, the other functionality(crud) in the 'chat' service is also
 using http. The gateway uses HTTP to communicate with clients.
 
 ## Metrics and monitoring
 
-Each service should be covered with metrics, so we could monitor services state.
-Nice solution will be Prometheus/Grafana.
+Each service should be covered with metrics (rps, memory usage, response status codes, etc.), so we could monitor services state.
+Nice solution will be Prometheus/Grafana. Moreover, tracing with OTel.
 
 ## Databases
 
