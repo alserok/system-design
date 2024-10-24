@@ -40,7 +40,8 @@ personal data is being hashed before processing, and before retrieving
 dehashed.
 
 Here, we send a message to redis pub/sub because we have multiple 
-instances of 'chats' service. All instances consume the message, and 
+instances of 'chats' service (broadcast the message to all listeners). 
+All instances consume the message, and 
 if the current user is online, they send him his message, 
 if not they don't. After that stage, the message just being stored to DB.
 
@@ -162,8 +163,6 @@ In this case, push-notifications. For that may be used Firebase.
 ---
 ## Messaging system
 
-<img src="images/benchmarks.png" alt="benchmarks">
-
 First of all, the goal was to find a fast and reliable solution that will handle
 a high load.
 
@@ -179,9 +178,8 @@ But for the other scenarios the winner was *NATS*. It is suitable for
 high-performance messaging, and microservices that require reliable 
 communication 
 with support for delivery guarantees, persistence, and robust scaling.
-Channels have more traffic than chats and notifying users about new data
-is really that important, is why here won the reliability and 
-high-performance messaging.
+Notifications have more traffic than 'chats' and notifying users about new data
+is really important, that is why *NATS* won here.
 
 
 ## Transfer protocols
