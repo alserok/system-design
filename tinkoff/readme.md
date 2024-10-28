@@ -60,16 +60,19 @@ those who use expired or wrong token.
 <img src="images/accounts.png" alt="accounts" style="border-radius: 10px;box-shadow: black 0px 3px 5px">
 
 <p style="text-align: justify">
+
 Users need to keep track of their finances and open new accounts. So this service
 `accounts` should provide them this functionality.
 </p>
 
 <p style="text-align: justify">
+
 It also receives data from `transaction` and `cashback` services
 to update user's balance.
 </p>
 
 <p style="text-align: justify">
+
 For example, `transactions` service while making a transaction:
 </p>
 
