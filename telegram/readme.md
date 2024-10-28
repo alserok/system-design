@@ -20,7 +20,7 @@ and then will be procedured to required service which instance will be chosen
 by load balancer. It is also implements rate limiting (by user's token) and circuit
 breaking functionality. It will help the system to handle the load.
 
-My choice was to make the gateway combine data from different data source (services),
+My choice was to make the gateway combine data from different data sources (services),
 for example, if a user needs to get  all his chats, the first request will go to
 'chats' service to get all chats, the second request will be sent to profile
 service to get users avatar and nicknames.
