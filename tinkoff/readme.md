@@ -32,7 +32,7 @@ all info required from other services.
 
 **In**: *HTTP*
 
-**Out**: *gRPC*
+**Out**: *gRPC* (fast)
 
 ---
 
@@ -49,9 +49,9 @@ those who use expired or wrong token.
 
 **DB**: *Postgres* (indexes)
 
-**Cache**: *Redis*
+**Cache**: *Redis* (fast, well suited for cache)
 
-**In**: *gRPC*
+**In**: *gRPC* 
 
 ---
 
@@ -96,11 +96,11 @@ Moreover, user needs to be notified after any update of his account.
 
 **DB**: *Postgres* (indexes, ACID transactions)
 
-**Cache**: *Redis*
+**Cache**: *Redis* (fast, well suited for cache)
 
-**In**: *gRPC, Kafka message*
+**In**: *gRPC, Kafka*
 
-**Out**: *Kafka message*
+**Out**: *Kafka* (asynchronous, no need to wait for response, reliable)
 
 ---
 
@@ -120,8 +120,8 @@ User receives notification after any transaction.
 
 **DB**: *Postgres* (indexes)
 
-**Cache**: *Redis*
+**Cache**: *Redis* (fast, well suited for cache)
 
 **In**: *gRPC*
 
-**Out**: *gRPC, Kafka message*
+**Out**: *gRPC, Kafka* (fast; asynchronous, no need to wait for response, reliable)
