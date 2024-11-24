@@ -36,8 +36,8 @@ Gateway redirects http/websocket requests to one of the instances,
 then a message is being sent to redis pub/sub and stored in DB.
 
 First of all, user privacy is the most important, that is why all
-personal data is being hashed before processing, and before retrieving
-dehashed.
+personal data is being encrypted before processing, and before retrieving
+decrypted.
 
 Here, we send a message to redis pub/sub because we have multiple 
 instances of `chats` service (broadcast the message to all listeners). 
@@ -77,7 +77,7 @@ token won't expire.
 
 Gateway communicates with this service via gRPC, gRPC was chosen due to its fast.
 
-I haven't mentioned, but of course all confidential user data has to be hashed.
+I haven't mentioned, but of course all confidential user data has to be encrypted.
 
 <img src="images/auth_db.png">
 
