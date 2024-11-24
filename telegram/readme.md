@@ -22,7 +22,7 @@ breaking functionality. It will help the system to handle the load.
 
 My choice was to make the gateway combine data from different data sources (services),
 for example, if a user needs to get  all his chats, the first request will go to
-'chats' service to get all chats, the second request will be sent to profile
+`chats` service to get all chats, the second request will be sent to profile
 service to get users avatar and nicknames.
 
 ---
@@ -40,7 +40,7 @@ personal data is being hashed before processing, and before retrieving
 dehashed.
 
 Here, we send a message to redis pub/sub because we have multiple 
-instances of 'chats' service (broadcast the message to all listeners). 
+instances of `chats` service (broadcast the message to all listeners). 
 All instances consume the message, and 
 if the current user is online, they send him his message, 
 if not they don't. After that stage, the message just being stored to DB.
@@ -52,6 +52,8 @@ It should be updated after each new message.
 
 As DB, I have chosen Mongo because it is suitable for a high load and
 storing data that may significantly differ(f.e a message may have attached files, reply etc.) 
+Also, ACID is not required (in chats we can let our system be eventual consistent), 
+and we can let our system be BASE and scaling with Mongo will be more convenient.
 
 <img src="images/s3.png" alt="s3">
 
@@ -80,7 +82,7 @@ I haven't mentioned, but of course all confidential user data has to be hashed.
 <img src="images/auth_db.png">
 
 As DB, there is a common and widely accepted solution—Postgres. Its indexes 
-would allow 'auth' service to get user data fast by its id.
+would allow `auth` service to get user data fast by its id.
 
 ---
 
@@ -96,8 +98,7 @@ gRPC was chosen due to its fast.
 <img src="images/chats_db.png" alt="channels db">
 
 So as not to repeat myself, 
-Mongo was chosen for the same reason as in chat service. Data structure may significantly 
-differ.
+Mongo was chosen for the same reason as in chat service.
 
 Files are stored in s3 too.
 
@@ -134,7 +135,8 @@ will take all the load on itself.
 
 <img src="images/chats_db.png" alt="profile db">
 
-As DB - Mongo, high load resistant and comfortable for different data structures
+As DB - Mongo, high load resistant and comfortable for different data structures, BASE is
+acceptable.
 (f.e. profile may have many photos, different 'about myself' sections)
 
 ---
@@ -145,7 +147,7 @@ As DB - Mongo, high load resistant and comfortable for different data structures
 
 Gateway communicates with this service via gRPC, for the same reason as earlier said.
 Cache will handle repeating requests to get a contact list.
-Friend invitation has its version, f.e. 'pending', 'accepted', 'denied'.
+Friend invitation has its version, f.e. `pending`, `accepted`, `denied`.
 
 <img src="images/contacts_db.png" alt="contacts db">
 
@@ -169,7 +171,7 @@ a high load.
 <img src="images/benchmarks1.png" alt="benchmarks">
 
 I had a choice between *Redis PUB/SUB* and *NATS*. Both are fast.
-In real time chat app it is crucial. In 'chats' service, I made a choice
+In real time chat app it is crucial. In `chats` service, I made a choice
 in favor of Redis because it is good for real-time messaging in scenarios 
 where real-time data access and caching are important, 
 chatting is exactly suitable.
@@ -178,7 +180,7 @@ But for the other scenarios the winner was *NATS*. It is suitable for
 high-performance messaging, and microservices that require reliable 
 communication 
 with support for delivery guarantees, persistence, and robust scaling.
-Notifications have more traffic than 'chats' and notifying users about new data
+Notifications have more traffic than `chats` and notifying users about new data
 is really important, that is why *NATS* won here.
 
 
@@ -188,7 +190,7 @@ is really important, that is why *NATS* won here.
 here. As for me, it is the best way to make inter-service communication.
 Transferring files may be implemented via gRPC streaming feature.
 * Websockets/HTTP - websocket is an optimal solution for real-time communication.
-And for the sake of simplicity, the other functionality(crud) in the 'chat' service is also
+And for the sake of simplicity, the other functionality(crud) in the `chat` service is also
 using http. The gateway uses HTTP to communicate with clients.
 
 ## Metrics and monitoring
@@ -199,6 +201,8 @@ Nice solution will be Prometheus/Grafana. Moreover, tracing with OTel.
 ## Databases
 
 * *Mongo* - is used by services where data structure may differ and required
-high performance. Also supports different scalability strategies from the box.
-* *Postgres* - is used by services where data is structured and expected 'select'
+high performance. Also supports different scalability strategies from the box. In our system
+eventual consistence is acceptable, that is why Mongo will be the best solution to
+scale the system.
+* *Postgres* - is used by services where data is structured and expected `select`
 operations where indexes are good enough. Scalability strategies may be implemented.
