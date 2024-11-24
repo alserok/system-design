@@ -82,7 +82,7 @@ For example, `transactions` service while making a transaction:
 2. Insert data into `transactional outbox` with status `pending`.
 3. Worker selects all data with `pending` status and sends a
    Kafka message to debit money from sender's balance and credit
-   them to recipient's balance. Update status to 'succeeded' in outbox.
+   them to recipient's balance. Update status to `succeeded` in outbox.
 
 `accounts` service:
 1. Consume a message from the topic and update balances. It may also be implemented
@@ -91,7 +91,7 @@ For example, `transactions` service while making a transaction:
 
 
 <p style="text-align: justify">
-Moreover, user needs to be notified after any update of his account.
+Moreover, user needs to be notified after any update of his account, also via Kafka topic.
 </p>
 
 **DB**: *Postgres* (indexes, ACID)
